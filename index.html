@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>3D Model Showcase</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <div id="canvas-container">
+    <div class="loading" id="loading">
+      <div class="loading-spinner"></div>
+      Cargando modelo...
+    </div>
+  </div>
+
+  <div class="overlay">
+    <div class="lighting-panel">
+      <div class="lighting-header">Light Type</div>
+
+      <div class="light-type-mobile">
+        <div class="light-type-selector">
+          <button class="light-nav-btn" id="prev-light">‹</button>
+          <div class="light-type-name" id="light-name">STUDIO</div>
+          <button class="light-nav-btn" id="next-light">›</button>
+        </div>
+      </div>
+
+      <div class="sliders-container">
+        <div class="slider-group">
+          <span class="slider-label">Rotation</span>
+          <input type="range" id="hdr-rotation" min="0" max="360" value="0">
+        </div>
+        <div class="slider-group">
+          <span class="slider-label">Exposure</span>
+          <input type="range" id="hdr-exposure" min="0.1" max="3" step="0.1" value="1">
+        </div>
+        <div class="slider-group">
+          <span class="slider-label">Intensity</span>
+          <input type="range" id="light-intensity" min="0" max="3" step="0.1" value="1">
+        </div>
+        <div class="slider-group">
+          <span class="slider-label">Ambient</span>
+          <input type="range" id="ambient-intensity" min="0" max="2" step="0.1" value="0.5">
+        </div>
+      </div>
+    </div>
+
+    <div class="model-info">
+      <div class="tech-specs" id="tech-specs"></div>
+      <div class="model-name" id="model-name"></div>
+    </div>
+
+    <div class="model-gallery">
+      <button id="prev-model">‹</button>
+      <div id="gallery-items"></div>
+      <button id="next-model">›</button>
+    </div>
+
+    <div class="controls-hint">
+      Arrastra para rotar<br>Scroll para zoom
+    </div>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
