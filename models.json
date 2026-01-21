@@ -3,33 +3,11 @@
     "id": 1,
     "name": "OWL",
     "path": "models/owl.glb",
-    "thumbnail": "thumbs/owl.jpg",
     "specs": {
-      "Polygons": "12,000 tris",
-      "Software": "Blender",
-      "Time": "8 hrs"
-    }
-  },
-  {
-    "id": 2,
-    "name": "MILES",
-    "path": "models/miles.glb",
-    "thumbnail": "thumbs/miles.jpg",
-    "specs": {
-      "Polygons": "18,000 tris",
-      "Software": "Blender + Substance",
-      "Time": "14 hrs"
-    }
-  },
-  {
-    "id": 3,
-    "name": "IXO",
-    "path": "models/ixo.glb",
-    "thumbnail": "thumbs/ixo.jpg",
-    "specs": {
-      "Polygons": "9,500 tris",
-      "Software": "Blender",
-      "Time": "6 hrs"
-    }
+      "POLYGON COUNT": "12,000 tris",
+      "CONCEPT": "Original",
+      "TIME": "~8 hrs"
+    },
+    "software": ["blender", "substance"]
   }
 ]

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>3D Model Showcase</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <script type="importmap">
     {
@@ -14,9 +14,8 @@
     }
   </script>
 
-  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./styles.css">
 </head>
-
 <body>
   <div id="canvas-container">
     <div class="loading" id="loading">
@@ -29,48 +28,150 @@
     <div class="lighting-panel">
       <div class="lighting-header">Light Type</div>
 
-      <div class="light-type-mobile">
-        <div class="light-type-selector">
-          <button class="light-nav-btn" id="prev-light">‹</button>
+      <div class="lighting-controls">
+        <div class="light-type-mobile">
+          <div class="light-type-selector">
+            <button class="light-nav-btn" id="prev-light">
+              <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+            </button>
+
+            <div class="light-icon-container" id="light-icon">
+              <svg viewBox="0 0 24 24" id="light-svg"></svg>
+            </div>
+
+            <button class="light-nav-btn" id="next-light">
+              <svg viewBox="0 0 24 24"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg>
+            </button>
+          </div>
+
           <div class="light-type-name" id="light-name">STUDIO</div>
-          <button class="light-nav-btn" id="next-light">›</button>
+        </div>
+
+        <div class="sliders-container">
+          <div class="slider-group">
+            <span class="slider-label">Rotation</span>
+            <div class="slider-row">
+              <input type="range" class="slider" id="hdr-rotation" min="0" max="360" value="0">
+            </div>
+          </div>
+
+          <div class="slider-group">
+            <span class="slider-label">Exposure</span>
+            <div class="slider-row">
+              <input type="range" class="slider" id="hdr-exposure" min="0.1" max="3" value="1" step="0.1">
+            </div>
+          </div>
+
+          <div class="slider-group">
+            <span class="slider-label">Intensity</span>
+            <div class="slider-row">
+              <input type="range" class="slider" id="light-intensity" min="0" max="3" value="1" step="0.1">
+            </div>
+          </div>
+
+          <div class="slider-group">
+            <span class="slider-label">Ambient</span>
+            <div class="slider-row">
+              <input type="range" class="slider" id="ambient-intensity" min="0" max="2" value="0.5" step="0.1">
+            </div>
+          </div>
         </div>
       </div>
+    </div>
 
-      <div class="sliders-container">
-        <div class="slider-group">
-          <span class="slider-label">Rotation</span>
-          <input type="range" id="hdr-rotation" min="0" max="360" value="0">
+    <div class="animation-panel" id="animation-panel">
+      <div class="anim-left">
+        <button class="anim-btn" id="play-btn" title="Play/Pause" disabled>
+          <svg viewBox="0 0 24 24" id="play-icon"><path d="M8 5v14l11-7z"/></svg>
+          <svg viewBox="0 0 24 24" id="pause-icon" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+
+        <button class="anim-btn" id="stop-btn" title="Stop" disabled>
+          <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"/></svg>
+        </button>
+
+        <button class="anim-btn" id="reset-btn" title="Reset" disabled>
+          <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+        </button>
+
+        <select class="anim-select" id="anim-select" disabled>
+          <option>Sin animaciones</option>
+        </select>
+      </div>
+
+      <div class="anim-right">
+        <div class="visibility-panel" id="visibility-panel">
+          <div class="visibility-row">
+            <span class="visibility-label">Grid</span>
+            <div class="toggle-switch active" id="grid-toggle" title="Mostrar/Ocultar grid"></div>
+          </div>
+          <div class="visibility-row">
+            <span class="visibility-label">UI</span>
+            <div class="toggle-switch active" id="ui-toggle" title="Mostrar/Ocultar interfaz"></div>
+          </div>
         </div>
-        <div class="slider-group">
-          <span class="slider-label">Exposure</span>
-          <input type="range" id="hdr-exposure" min="0.1" max="3" step="0.1" value="1">
-        </div>
-        <div class="slider-group">
-          <span class="slider-label">Intensity</span>
-          <input type="range" id="light-intensity" min="0" max="3" step="0.1" value="1">
-        </div>
-        <div class="slider-group">
-          <span class="slider-label">Ambient</span>
-          <input type="range" id="ambient-intensity" min="0" max="2" step="0.1" value="0.5">
-        </div>
+      </div>
+    </div>
+
+    <div class="render-dropdown-container">
+      <button class="render-dropdown-btn" id="render-dropdown-btn">
+        <span id="current-render-mode">Composite</span>
+        <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+      </button>
+
+      <div class="render-dropdown-menu" id="render-dropdown-menu">
+        <button class="render-option active" data-mode="composite">Composite</button>
+        <button class="render-option" data-mode="wireframe">Wireframe</button>
+        <button class="render-option" data-mode="albedo">Albedo</button>
+        <button class="render-option" data-mode="metallic">Metallic</button>
+        <button class="render-option" data-mode="roughness">Roughness</button>
+        <button class="render-option" data-mode="normal">Normal</button>
+        <button class="render-option" data-mode="ambientOcclusion">Ambient Occlusion</button>
+        <button class="render-option" data-mode="emissive">Emissive</button>
       </div>
     </div>
 
     <div class="model-info">
       <div class="tech-specs" id="tech-specs"></div>
-      <div class="model-name" id="model-name"></div>
+      <div class="model-name" id="model-name">Character Name</div>
+
+      <div class="software-icons" id="software-icons">
+        <div class="software-icon hidden" data-software="blender" title="Blender">
+          <svg viewBox="0 0 24 24"><path d="M21 12c0 5-4 9-9 9s-9-4-9-9 4-9 9-9 9 4 9 9z"/></svg>
+        </div>
+        <div class="software-icon hidden" data-software="substance" title="Substance Painter">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/></svg>
+        </div>
+        <div class="software-icon hidden" data-software="maya" title="Autodesk Maya">
+          <svg viewBox="0 0 24 24"><path d="M6 2h12v20H6z"/></svg>
+        </div>
+        <div class="software-icon hidden" data-software="zbrush" title="ZBrush">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/></svg>
+        </div>
+      </div>
     </div>
 
     <div class="model-gallery">
-      <button id="prev-model">‹</button>
-      <div id="gallery-items"></div>
-      <button id="next-model">›</button>
+      <button class="gallery-nav" id="prev-model">
+        <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      </button>
+
+      <div class="gallery-items" id="gallery-items"></div>
+
+      <button class="gallery-nav" id="next-model">
+        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg>
+      </button>
     </div>
 
     <div class="controls-hint">
-      Arrastra para rotar<br>Scroll para zoom
+      Arrastra para rotar<br>
+      Scroll para zoom
     </div>
+  </div>
+
+  <div class="ui-restore" id="ui-restore" aria-label="Restaurar interfaz">
+    <span class="visibility-label">UI</span>
+    <div class="toggle-switch" id="ui-restore-toggle" title="Volver a mostrar la interfaz"></div>
   </div>
 
   <script type="module" src="./app.js"></script>
