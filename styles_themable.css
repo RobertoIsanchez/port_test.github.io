@@ -1,0 +1,1012 @@
+* {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    
+
+/* ============================================================
+   THEME (cambia estos valores para ajustar colores rápidamente)
+   ============================================================ */
+:root{
+  /* Colores base */
+  --bg: #0a0a0a;
+  --text-solid: #ffffff;           /* texto/iconos */
+  --text-rgb: 255 255 255;         /* para opacidades: rgb(var(--text-rgb) / 0.2) */
+  --black-rgb: 0 0 0;
+
+  /* Paneles / superficies */
+  --panel-bg: rgb(var(--black-rgb) / 0.35);
+  --panel-bg-strong: rgb(var(--black-rgb) / 0.45);
+  --dropdown-bg: rgb(20 20 20 / 0.95);
+
+  /* Bordes / fills (derivados del color de texto) */
+  --border-strong: rgb(var(--text-rgb) / 0.2);
+  --border-soft:   rgb(var(--text-rgb) / 0.15);
+  --border-hover:  rgb(var(--text-rgb) / 0.4);
+  --fill-soft:     rgb(var(--text-rgb) / 0.05);
+  --fill-hover:    rgb(var(--text-rgb) / 0.1);
+
+  /* Detalles HUD (ajusta a tu gusto) */
+  --accent: #2aa8ff;               /* azul HUD */
+  --axis-x: #ff3b3b;               /* eje X */
+  --axis-z: #3b6bff;               /* eje Z */
+
+  /* Loading */
+  --spinner-track: rgb(var(--text-rgb) / 0.1);
+}
+
+body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    #canvas-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+      padding: 24px 32px;
+    }
+
+    /* ============================================
+       PANEL DE ILUMINACIÓN - ARRIBA IZQUIERDA
+    ============================================ */
+    .lighting-panel {
+      position: absolute;
+      top: 24px;
+      left: 32px;
+      pointer-events: auto;
+      color: var(--text-solid);
+    }
+
+    .lighting-header {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      opacity: 0.7;
+    }
+
+    .light-type-selector {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .light-nav-btn {
+      width: 28px;
+      height: 28px;
+      background: transparent;
+      border: 1px solid var(--border-strong);
+      border-radius: 4px;
+      color: var(--text-solid);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .light-nav-btn:hover {
+      background: var(--fill-hover);
+      border-color: rgb(var(--text-rgb) / 0.4);
+    }
+
+    .light-nav-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .light-icon-container {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      border: 2px solid rgb(var(--text-rgb) / 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--fill-soft);
+      transition: all 0.3s;
+    }
+
+    .light-icon-container svg {
+      width: 28px;
+      height: 28px;
+      fill: var(--text-solid);
+      opacity: 0.9;
+    }
+
+    .light-type-name {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 0.6;
+      text-align: center;
+      width: 130px;
+    }
+
+    .slider-group {
+      margin-bottom: 14px;
+    }
+
+    .slider-label {
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: 0.5;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100px;
+      height: 3px;
+      background: rgb(var(--text-rgb) / 0.15);
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 10px;
+      height: 10px;
+      background: #fff;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+      width: 10px;
+      height: 10px;
+      background: #fff;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+    }
+
+
+
+    .toggle-switch {
+      position: relative;
+      width: 36px;
+      height: 18px;
+      background: var(--fill-hover);
+      border-radius: 9px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .toggle-switch.active {
+      background: rgb(var(--text-rgb) / 0.3);
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+
+    .toggle-switch.active::after {
+      transform: translateX(18px);
+    }
+
+    /* ============================================
+       CONTROLES DE ANIMACIÓN - ARRIBA CENTRO
+    ============================================ */
+    .animation-panel {
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      pointer-events: auto;
+    }
+
+    /* Layout interno del reproductor (desktop/tablet) */
+    .anim-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .anim-right {
+      display: flex;
+      align-items: center;
+    }
+
+    .anim-btn {
+      width: 36px;
+      height: 36px;
+      background: var(--fill-soft);
+      border: 1px solid var(--border-strong);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-solid);
+    }
+
+    .anim-btn:hover {
+      background: var(--fill-hover);
+      border-color: rgb(var(--text-rgb) / 0.4);
+    }
+
+    .anim-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .anim-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .anim-select {
+      padding: 8px 32px 8px 14px;
+      background: var(--fill-soft);
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      color: var(--text-solid);
+      font-size: 12px;
+      cursor: pointer;
+      min-width: 0;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+
+    .anim-select:focus {
+      outline: none;
+      border-color: rgb(var(--text-rgb) / 0.4);
+    }
+
+    .anim-select option {
+      background: #1a1a1a;
+      color: var(--text-solid);
+    }
+    /* ============================================
+       DROPDOWN DE RENDER MODE - ARRIBA DERECHA
+    ============================================ */
+    .render-dropdown-container {
+      position: absolute;
+      top: 24px;
+      right: 32px;
+      pointer-events: auto;
+    }
+
+    .render-dropdown-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 16px;
+      min-width: 160px;
+      background: var(--fill-soft);
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      color: var(--text-solid);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .render-dropdown-btn:hover {
+      background: var(--fill-hover);
+      border-color: rgb(var(--text-rgb) / 0.3);
+    }
+
+    .render-dropdown-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+      transition: transform 0.2s;
+    }
+
+    .render-dropdown-btn.open svg {
+      transform: rotate(180deg);
+    }
+
+    .render-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 160px;
+      background: rgba(20,20,20,0.95);
+      border: 1px solid var(--border-soft);
+      border-radius: 8px;
+      padding: 6px 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.2s;
+      backdrop-filter: blur(10px);
+    }
+
+    .render-dropdown-menu.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .render-option {
+      display: block;
+      width: 100%;
+      padding: 10px 16px;
+      background: transparent;
+      border: none;
+      color: rgb(var(--text-rgb) / 0.7);
+      font-size: 13px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .render-option:hover {
+      background: var(--fill-hover);
+      color: var(--text-solid);
+    }
+
+    .render-option.active {
+      color: var(--text-solid);
+      background: rgb(var(--text-rgb) / 0.08);
+    }
+
+    /* ============================================
+       INFO DEL MODELO - ABAJO IZQUIERDA
+    ============================================ */
+    .model-info {
+      position: absolute;
+      bottom: 24px;
+      left: 32px;
+      color: var(--text-solid);
+      pointer-events: auto;
+    }
+
+    .tech-specs {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: 8px;
+    }
+
+    .spec-row {
+      display: flex;
+      gap: 8px;
+      font-size: 9px;
+      opacity: 0.5;
+    }
+
+    .spec-label {
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .spec-value {
+      opacity: 0.8;
+    }
+
+    .model-name {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .software-icons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .software-icon {
+      width: 24px;
+      height: 24px;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+      display: none;
+    }
+
+    .software-icon.visible {
+      display: block;
+    }
+
+    .software-icon:hover {
+      opacity: 1;
+    }
+
+    .software-icon svg {
+      width: 100%;
+      height: 100%;
+      fill: var(--text-solid);
+    }
+
+    /* ============================================
+       GALERÍA DE MODELOS - ABAJO CENTRO
+    ============================================ */
+    .model-gallery {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      pointer-events: auto;
+    }
+
+    .gallery-nav {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border-strong);
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-solid);
+      transition: all 0.2s;
+    }
+
+    .gallery-nav:hover {
+      background: var(--fill-hover);
+      border-color: rgb(var(--text-rgb) / 0.4);
+    }
+
+    .gallery-nav svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .gallery-items {
+      display: flex;
+      gap: 10px;
+    }
+
+    .gallery-item {
+      width: 56px;
+      height: 56px;
+      border-radius: 10px;
+      border: 2px solid rgb(var(--text-rgb) / 0.15);
+      background: rgb(var(--text-rgb) / 0.03);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      overflow: hidden;
+    }
+
+    .gallery-item:hover {
+      border-color: rgb(var(--text-rgb) / 0.4);
+      transform: scale(1.05);
+    }
+
+    .gallery-item.active {
+      border-color: var(--text-solid);
+      background: var(--fill-hover);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gallery-number {
+      font-size: 16px;
+      font-weight: 700;
+      color: rgb(var(--text-rgb) / 0.4);
+    }
+
+    .gallery-item.active .gallery-number {
+      color: var(--text-solid);
+    }
+
+    /* ============================================
+       HINTS DE CONTROLES - ABAJO DERECHA
+    ============================================ */
+    .controls-hint {
+      position: absolute;
+      bottom: 24px;
+      right: 32px;
+      text-align: right;
+      color: rgb(var(--text-rgb) / 0.35);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    /* ============================================
+       LOADING
+    ============================================ */
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--text-solid);
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .loading-spinner {
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--spinner-track);
+      border-top-color: var(--text-solid);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 12px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .no-animations {
+      font-size: 11px;
+      opacity: 0.4;
+      font-style: italic;
+    }
+
+    /* ============================================
+       RESPONSIVE MOBILE STYLES
+    ============================================ */
+    @media (max-width: 768px) {
+      .overlay {
+        padding: 16px;
+      }
+
+      /* Model info - Top left on mobile */
+      .model-info {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        bottom: auto;
+      }
+
+      .model-name {
+        font-size: 20px;
+        margin-bottom: 6px;
+        order: -1;
+      }
+
+      .software-icons {
+        margin-bottom: 10px;
+      }
+
+      .tech-specs {
+        margin-bottom: 12px;
+      }
+
+      /* Controls hint - Below model info on mobile */
+      .controls-hint {
+        position: absolute;
+        top: auto;
+        bottom: auto;
+        top: 130px;
+        left: 16px;
+        right: auto;
+        text-align: left;
+        font-size: 10px;
+      }
+
+      /* Render dropdown - Top right */
+      .render-dropdown-container {
+        top: 16px;
+        right: 16px;
+      }
+
+      .render-dropdown-btn {
+        min-width: 120px;
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+
+      .render-dropdown-menu {
+        min-width: 120px;
+      }
+
+      .render-option {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+
+      /* Animation panel - Bottom bar (like reference) */
+      .animation-panel {
+        position: fixed;
+        top: auto;
+        left: 16px;
+        right: 16px;
+        bottom: 220px;
+        transform: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: nowrap;
+        padding: 10px 12px;
+        border: 1px solid var(--border-soft);
+        border-radius: 14px;
+        background: var(--panel-bg);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        z-index: 30;
+      }
+
+      .anim-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .anim-right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex-shrink: 0;
+      }
+
+      .anim-btn {
+        width: 32px;
+        height: 32px;
+      }
+
+      .anim-btn svg {
+        width: 12px;
+        height: 12px;
+      }
+
+      .anim-select {
+        min-width: 0;
+        width: auto;
+        flex: 1;
+        padding: 6px 28px 6px 10px;
+        font-size: 11px;
+      }
+
+      /* Toggles a la derecha, sin “caja” extra en mobile */
+      .animation-panel .visibility-panel {
+        border: none;
+        padding: 0;
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        gap: 12px;
+      }
+
+      .animation-panel .visibility-row {
+        gap: 8px;
+      }
+
+      .fps-display {
+        font-size: 11px;
+        min-width: 50px;
+      }
+
+      /* Lighting panel - Sliders below animation bar (remove Shadows UI) */
+      .lighting-panel {
+        position: fixed;
+        top: auto;
+        bottom: 120px;
+        left: 16px;
+        right: 16px;
+        display: block;
+        border-radius: 12px;
+        padding: 12px;
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+      }
+
+      .lighting-panel::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgb(var(--black-rgb) / 0.4);
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* Asegura que sliders queden por encima del fondo */
+      .sliders-container {
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Render dropdown debe quedar por encima cuando esté abierto */
+      .render-dropdown-container {
+        z-index: 50;
+      }
+
+      /* Light Type debajo del dropdown en mobile */
+      .lighting-header {
+        display: block;
+        position: fixed;
+        top: 72px;
+        right: 16px;
+        width: 120px;
+        text-align: center;
+        margin-bottom: 0;
+        z-index: 40;
+        pointer-events: none;
+      }
+
+      .light-type-mobile {
+        position: fixed;
+        top: 90px;
+        right: 16px;
+        width: 120px;
+        z-index: 40;
+      }
+
+      .light-type-selector {
+        flex-direction: row;
+        gap: 8px;
+        margin-bottom: 0;
+        flex-shrink: 0;
+      }
+
+      .light-nav-btn {
+        width: 24px;
+        height: 24px;
+      }
+
+      .light-nav-btn svg {
+        width: 12px;
+        height: 12px;
+      }
+
+      .light-icon-container {
+        width: 48px;
+        height: 48px;
+      }
+
+      .light-icon-container svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .light-type-name {
+        font-size: 9px;
+        letter-spacing: 2px;
+        margin-bottom: 0;
+        width: auto;
+        text-align: center;
+      }
+
+      /* Mobile light type with arrows on sides */
+      .light-type-mobile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .light-arrows-mobile {
+        display: flex;
+        gap: 4px;
+      }
+
+      /* Sliders in grid layout */
+      .sliders-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px 16px;
+        flex: 1;
+      }
+
+      .slider-group {
+        margin-bottom: 0;
+      }
+
+      .slider-label {
+        font-size: 8px;
+        margin-bottom: 4px;
+      }
+
+      .slider {
+        width: 100%;
+      }
+
+      /* No shadow UI in mobile */
+
+      /* Gallery - Bottom center */
+      .model-gallery {
+        bottom: 16px;
+        gap: 8px;
+      }
+
+      .gallery-nav {
+        width: 32px;
+        height: 32px;
+      }
+
+      .gallery-nav svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .gallery-item {
+        width: 48px;
+        height: 48px;
+      }
+
+      .gallery-number {
+        font-size: 14px;
+      }
+    }
+
+    /* Very small screens */
+    @media (max-width: 480px) {
+      .model-name {
+        font-size: 18px;
+      }
+
+      .gallery-item {
+        width: 40px;
+        height: 40px;
+      }
+
+      .gallery-number {
+        font-size: 12px;
+      }
+
+      .lighting-panel {
+        padding: 10px;
+        gap: 12px;
+      }
+
+      .light-icon-container {
+        width: 40px;
+        height: 40px;
+      }
+
+      .light-icon-container svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .sliders-container {
+        gap: 6px 12px;
+      }
+
+      .animation-panel {
+        bottom: 200px;
+      }
+
+      .anim-select {
+        min-width: 100px;
+      }
+    }
+  
+
+    /* ============================================
+       VISIBILITY TOGGLES (GRID / UI)
+    ============================================ */
+    .visibility-panel {
+      position: static;
+      pointer-events: auto;
+      color: var(--text-solid);
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      padding: 8px 10px;
+      border: 1px solid var(--border-soft);
+      border-radius: 10px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .visibility-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .visibility-label {
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: 0.55;
+    }
+
+    .ui-restore {
+      position: fixed;
+      top: 24px;
+      right: 32px;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      background: var(--panel-bg-strong);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      /*
+        Toggle flotante para restaurar la UI:
+        - Cuando la UI está activa: invisible y sin interacción (evita superposición con el dropdown)
+        - Cuando la UI está oculta: visible e interactivo
+      */
+      pointer-events: none;
+      color: var(--text-solid);
+      min-width: 140px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 200ms ease;
+    }
+
+    body.ui-hidden .overlay {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    body.ui-hidden .ui-restore {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 768px) {
+      .ui-restore {
+        top: 16px;
+        right: 16px;
+      }
+    }
