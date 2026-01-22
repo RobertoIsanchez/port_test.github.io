@@ -411,6 +411,12 @@
       gap: 10px;
     }
 
+    
+        /* Orden base (desktop + mobile). Se puede sobreescribir en @media */
+    .model-name { order: 0; }
+    .tech-specs { order: 1; }
+    .software-icons { order: 2; }
+
     .software-icon {
       width: 24px;
       height: 24px;
