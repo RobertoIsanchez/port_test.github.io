@@ -399,80 +399,224 @@ import * as THREE from 'three';
     // ============================================================
     // GRID 3D
     // ============================================================
+    // ============================================================
+    // GRID 3D (ORIGINAL) - Comentado por si lo necesitas de vuelta
+    // ============================================================
+    // const gridGroup = new THREE.Group();
+    // scene.add(gridGroup);
+// 
+    // const gridSize = 20;
+    // const gridDivisions = 20;
+    // const gridHelper = new THREE.GridHelper(gridSize, gridDivisions, 0x444444, 0x2a2a2a);
+    // gridHelper.position.y = 0;
+    // gridHelper.material.opacity = 0.4;
+    // gridHelper.material.transparent = true;
+    // gridGroup.add(gridHelper);
+// 
+    // const gridHelperFine = new THREE.GridHelper(gridSize, gridDivisions * 4, 0x333333, 0x1a1a1a);
+    // gridHelperFine.position.y = 0;
+    // gridHelperFine.material.opacity = 0.2;
+    // gridHelperFine.material.transparent = true;
+    // gridGroup.add(gridHelperFine);
+// 
+    // const axisLength = gridSize / 2;
+    // 
+    // const xAxisGeometry = new THREE.BufferGeometry().setFromPoints([
+    //   new THREE.Vector3(-axisLength, 0.01, 0),
+    //   new THREE.Vector3(axisLength, 0.01, 0)
+    // ]);
+    // const xAxisMaterial = new THREE.LineBasicMaterial({ color: 0xff4444, opacity: 0.6, transparent: true });
+    // const xAxis = new THREE.Line(xAxisGeometry, xAxisMaterial);
+    // gridGroup.add(xAxis);
+// 
+    // const zAxisGeometry = new THREE.BufferGeometry().setFromPoints([
+    //   new THREE.Vector3(0, 0.01, -axisLength),
+    //   new THREE.Vector3(0, 0.01, axisLength)
+    // ]);
+    // const zAxisMaterial = new THREE.LineBasicMaterial({ color: 0x4444ff, opacity: 0.6, transparent: true });
+    // const zAxis = new THREE.Line(zAxisGeometry, zAxisMaterial);
+    // gridGroup.add(zAxis);
+// 
+    // const groundGeometry = new THREE.PlaneGeometry(gridSize, gridSize, 1, 1);
+    // const groundMaterial = new THREE.ShaderMaterial({
+    //   uniforms: {
+    //     uColor: { value: new THREE.Color(0x1a1a1a) },
+    //     uOpacity: { value: 0.3 },
+    //     uFadeRadius: { value: 0.8 }
+    //   },
+    //   vertexShader: `
+    //     varying vec2 vUv;
+    //     void main() {
+    //       vUv = uv;
+    //       gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    //     }
+    //   `,
+    //   fragmentShader: `
+    //     uniform vec3 uColor;
+    //     uniform float uOpacity;
+    //     uniform float uFadeRadius;
+    //     varying vec2 vUv;
+    //     void main() {
+    //       vec2 center = vUv - 0.5;
+    //       float dist = length(center) * 2.0;
+    //       float fade = 1.0 - smoothstep(uFadeRadius * 0.5, uFadeRadius, dist);
+    //       gl_FragColor = vec4(uColor, uOpacity * fade);
+    //     }
+    //   `,
+    //   transparent: true,
+    //   side: THREE.DoubleSide,
+    //   depthWrite: false
+    // });
+    // const groundPlane = new THREE.Mesh(groundGeometry, groundMaterial);
+    // groundPlane.rotation.x = -Math.PI / 2;
+    // groundPlane.position.y = -0.01;
+    // groundPlane.receiveShadow = true;
+    // gridGroup.add(groundPlane);
+// 
+    // let gridOpacity = 1;
+// 
+    // let gridEnabled = true;
+
+    // ============================================================
+    // GRID 3D (NUEVO) - Shader con máscara radial (sin borde cuadrado)
+    // ============================================================
     const gridGroup = new THREE.Group();
     scene.add(gridGroup);
 
-    const gridSize = 20;
-    const gridDivisions = 20;
-    const gridHelper = new THREE.GridHelper(gridSize, gridDivisions, 0x444444, 0x2a2a2a);
-    gridHelper.position.y = 0;
-    gridHelper.material.opacity = 0.4;
-    gridHelper.material.transparent = true;
-    gridGroup.add(gridHelper);
+    const gridSize = 20;        // tamaño del plano (unidades)
+    const minorCell = 0.5;      // separación grid fino
+    const majorCell = 2.0;      // separación grid grueso
 
-    const gridHelperFine = new THREE.GridHelper(gridSize, gridDivisions * 4, 0x333333, 0x1a1a1a);
-    gridHelperFine.position.y = 0;
-    gridHelperFine.material.opacity = 0.2;
-    gridHelperFine.material.transparent = true;
-    gridGroup.add(gridHelperFine);
+    const gridGeometry = new THREE.PlaneGeometry(gridSize, gridSize, 1, 1);
 
-    const axisLength = gridSize / 2;
-    
-    const xAxisGeometry = new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(-axisLength, 0.01, 0),
-      new THREE.Vector3(axisLength, 0.01, 0)
-    ]);
-    const xAxisMaterial = new THREE.LineBasicMaterial({ color: 0xff4444, opacity: 0.6, transparent: true });
-    const xAxis = new THREE.Line(xAxisGeometry, xAxisMaterial);
-    gridGroup.add(xAxis);
-
-    const zAxisGeometry = new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(0, 0.01, -axisLength),
-      new THREE.Vector3(0, 0.01, axisLength)
-    ]);
-    const zAxisMaterial = new THREE.LineBasicMaterial({ color: 0x4444ff, opacity: 0.6, transparent: true });
-    const zAxis = new THREE.Line(zAxisGeometry, zAxisMaterial);
-    gridGroup.add(zAxis);
-
-    const groundGeometry = new THREE.PlaneGeometry(gridSize, gridSize, 1, 1);
-    const groundMaterial = new THREE.ShaderMaterial({
+    const gridMaterial = new THREE.ShaderMaterial({
       uniforms: {
-        uColor: { value: new THREE.Color(0x1a1a1a) },
-        uOpacity: { value: 0.3 },
-        uFadeRadius: { value: 0.8 }
+        uMinorCell: { value: minorCell },
+        uMajorCell: { value: majorCell },
+
+        // Opacidades base (se multiplican por uGlobalOpacity)
+        uMinorOpacity: { value: 0.18 },
+        uMajorOpacity: { value: 0.35 },
+        uAxisOpacity:  { value: 0.65 },
+
+        // Fade radial (0..1, basado en distancia al centro)
+        uFadeStart: { value: 0.55 },
+        uFadeEnd:   { value: 0.98 },
+
+        // Radio en mundo (mitad del plano)
+        uGridRadius: { value: (gridSize * 0.5) },
+
+        // Colores
+        uMinorColor: { value: new THREE.Color(0x1a1a1a) },
+        uMajorColor: { value: new THREE.Color(0x2a2a2a) },
+        uAxisXColor: { value: new THREE.Color(0xff4444) },
+        uAxisZColor: { value: new THREE.Color(0x4444ff) },
+
+        // Control global (para el fade al bajar la cámara)
+        uGlobalOpacity: { value: 1.0 }
       },
       vertexShader: `
-        varying vec2 vUv;
+        varying vec3 vWorldPos;
         void main() {
-          vUv = uv;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          vec4 wp = modelMatrix * vec4(position, 1.0);
+          vWorldPos = wp.xyz;
+          gl_Position = projectionMatrix * viewMatrix * wp;
         }
       `,
       fragmentShader: `
-        uniform vec3 uColor;
-        uniform float uOpacity;
-        uniform float uFadeRadius;
-        varying vec2 vUv;
+        precision highp float;
+
+        varying vec3 vWorldPos;
+
+        uniform float uMinorCell;
+        uniform float uMajorCell;
+        uniform float uMinorOpacity;
+        uniform float uMajorOpacity;
+        uniform float uAxisOpacity;
+
+        uniform float uFadeStart;
+        uniform float uFadeEnd;
+        uniform float uGridRadius;
+
+        uniform vec3 uMinorColor;
+        uniform vec3 uMajorColor;
+        uniform vec3 uAxisXColor;
+        uniform vec3 uAxisZColor;
+
+        uniform float uGlobalOpacity;
+
+        // Línea de grid anti-aliased
+        float gridLine(float coord, float cellSize) {
+          float x = coord / cellSize;
+          float w = fwidth(x);
+          float a = abs(fract(x - 0.5) - 0.5);
+          float line = 1.0 - smoothstep(0.0, w * 1.25, a);
+          return line;
+        }
+
+        float grid2D(vec2 p, float cellSize) {
+          float lx = gridLine(p.x, cellSize);
+          float lz = gridLine(p.y, cellSize);
+          return max(lx, lz);
+        }
+
+        float axisLine(float coord) {
+          float w = fwidth(coord);
+          return 1.0 - smoothstep(0.0, w * 2.0, abs(coord));
+        }
+
         void main() {
-          vec2 center = vUv - 0.5;
-          float dist = length(center) * 2.0;
-          float fade = 1.0 - smoothstep(uFadeRadius * 0.5, uFadeRadius, dist);
-          gl_FragColor = vec4(uColor, uOpacity * fade);
+          // El plano está en Y=0, usamos XZ como 2D
+          vec2 p = vWorldPos.xz;
+
+          float minor = grid2D(p, uMinorCell);
+          float major = grid2D(p, uMajorCell);
+
+          // Ejes: X (rojo) y Z (azul)
+          float axZ = axisLine(p.x); // línea sobre X=0 (eje Z)
+          float axX = axisLine(p.y); // línea sobre Z=0 (eje X)
+
+          // Fade radial suave (para que no se vea el borde del plano)
+          float dist01 = clamp(length(p) / uGridRadius, 0.0, 1.0);
+          float fade = 1.0 - smoothstep(uFadeStart, uFadeEnd, dist01);
+
+          vec3 col = vec3(0.0);
+          float alpha = 0.0;
+
+          col += uMinorColor * minor;
+          alpha += uMinorOpacity * minor;
+
+          col += uMajorColor * major;
+          alpha += uMajorOpacity * major;
+
+          // Ejes por encima
+          col = mix(col, uAxisZColor, axZ);
+          alpha = max(alpha, uAxisOpacity * axZ);
+
+          col = mix(col, uAxisXColor, axX);
+          alpha = max(alpha, uAxisOpacity * axX);
+
+          // Fade radial + fade global (cámara abajo)
+          alpha *= fade * uGlobalOpacity;
+
+          if (alpha < 0.01) discard;
+          gl_FragColor = vec4(col, alpha);
         }
       `,
       transparent: true,
-      side: THREE.DoubleSide,
-      depthWrite: false
+      depthWrite: false,
+      side: THREE.DoubleSide
     });
-    const groundPlane = new THREE.Mesh(groundGeometry, groundMaterial);
-    groundPlane.rotation.x = -Math.PI / 2;
-    groundPlane.position.y = -0.01;
-    groundPlane.receiveShadow = true;
-    gridGroup.add(groundPlane);
+
+    const gridPlane = new THREE.Mesh(gridGeometry, gridMaterial);
+    gridPlane.rotation.x = -Math.PI / 2;
+    gridPlane.position.y = 0.0;
+    gridPlane.receiveShadow = true;
+    gridGroup.add(gridPlane);
 
     let gridOpacity = 1;
-
     let gridEnabled = true;
+
 
     // ============================================================
     // LUCES
@@ -1149,11 +1293,10 @@ import * as THREE from 'three';
       gridOpacity += (targetOpacity - gridOpacity) * 0.1;
 
       if (gridEnabled) {
-        gridHelper.material.opacity = 0.4 * gridOpacity;
-        gridHelperFine.material.opacity = 0.2 * gridOpacity;
-        xAxisMaterial.opacity = 0.6 * gridOpacity;
-        zAxisMaterial.opacity = 0.6 * gridOpacity;
-        groundMaterial.uniforms.uOpacity.value = 0.3 * gridOpacity;
+        // Mantiene el comportamiento original: cuando la cámara baja (Y < 0) el grid desaparece suavemente
+        if (gridMaterial && gridMaterial.uniforms && gridMaterial.uniforms.uGlobalOpacity) {
+          gridMaterial.uniforms.uGlobalOpacity.value = gridOpacity;
+        }
         gridGroup.visible = gridOpacity > 0.01;
       } else {
         gridGroup.visible = false;
