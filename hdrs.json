@@ -121,7 +121,7 @@
     {
       "id": "forest",
       "name": "FOREST",
-      "hdr": "fhdr/orest.hdr",
+      "hdr": "hdr/forest.hdr",
       "iconSvg": "<path d='M12 2L7 9h3v4H7l5 9 5-9h-3V9h3L12 2z'/><rect x='11' y='18' width='2' height='4'/>",
       "lighting": {
         "ambient": {
