@@ -4,7 +4,7 @@
     {
       "id": "studio",
       "name": "STUDIO",
-      "hdr": "studio.hdr",
+      "hdr": "hdr/studio.hdr",
       "iconSvg": "<circle cx='12' cy='12' r='5'/><path d='M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42' stroke='currentColor' stroke-width='2'/>",
       "lighting": {
         "ambient": {
@@ -43,7 +43,7 @@
     {
       "id": "sunset",
       "name": "SUNSET",
-      "hdr": "sunset.hdr",
+      "hdr": "hdr/sunset.hdr",
       "iconSvg": "<circle cx='12' cy='17' r='5'/><path d='M12 12V2M4 17h16' stroke='currentColor' stroke-width='2'/><path d='M5.64 11.64l1.42 1.42M18.36 11.64l-1.42 1.42' stroke='currentColor' stroke-width='2'/>",
       "lighting": {
         "ambient": {
@@ -82,7 +82,7 @@
     {
       "id": "night",
       "name": "NIGHT",
-      "hdr": "night.hdr",
+      "hdr": "hdr/night.hdr",
       "iconSvg": "<path d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/><circle cx='17' cy='5' r='1'/><circle cx='19' cy='9' r='0.5'/>",
       "lighting": {
         "ambient": {
@@ -121,7 +121,7 @@
     {
       "id": "forest",
       "name": "FOREST",
-      "hdr": "forest.hdr",
+      "hdr": "fhdr/orest.hdr",
       "iconSvg": "<path d='M12 2L7 9h3v4H7l5 9 5-9h-3V9h3L12 2z'/><rect x='11' y='18' width='2' height='4'/>",
       "lighting": {
         "ambient": {
@@ -160,7 +160,7 @@
     {
       "id": "city",
       "name": "CITY",
-      "hdr": "city.hdr",
+      "hdr": "hdr/city.hdr",
       "iconSvg": "<rect x='3' y='10' width='4' height='12'/><rect x='10' y='6' width='4' height='16'/><rect x='17' y='12' width='4' height='10'/><path d='M5 12h0M12 8h0M12 11h0M19 14h0' stroke='currentColor' stroke-width='2' stroke-linecap='round'/>",
       "lighting": {
         "ambient": {
@@ -199,7 +199,7 @@
     {
       "id": "warehouse",
       "name": "WAREHOUSE",
-      "hdr": "warehouse.hdr",
+      "hdr": "hdr/warehouse.hdr",
       "iconSvg": "<rect x='2' y='8' width='20' height='14' rx='1'/><path d='M6 8V4h12v4' stroke='currentColor' stroke-width='2'/><circle cx='12' cy='15' r='3' fill='none' stroke='currentColor' stroke-width='2'/>",
       "lighting": {
         "ambient": {
