@@ -11,6 +11,73 @@ import * as THREE from 'three';
     // ============================================================
     const MODELS_JSON_URL = './models.json';
 
+    // Fallback (por si models.json no está disponible). Mantiene compatibilidad.
+    const fallbackModelsGallery = [
+  {
+    "id": 1,
+    "name": "OWL",
+    "path": "./owl.glb",
+    "thumbnail": "",
+    "software": [
+      "blender",
+      "substance"
+    ],
+    "specs": {
+      "Polygon Count": "12,000 tris",
+      "Concept": "Original",
+      "Time": "~8 hrs"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Character Model",
+    "path": "./miles.glb",
+    "thumbnail": "",
+    "software": [
+      "blender",
+      "zbrush",
+      "substance",
+      "photoshop"
+    ],
+    "specs": {
+      "Polygon Count": "85,000 tris",
+      "Concept": "Artist",
+      "Time": "~120 hrs"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Environment Prop",
+    "path": "./ixo.glb",
+    "thumbnail": "",
+    "software": [
+      "blender",
+      "photoshop"
+    ],
+    "specs": {
+      "Polygon Count": "5,200 tris",
+      "Concept": "Original",
+      "Time": "~15 hrs"
+    }
+  },
+  {
+    "id": 4,
+    "name": "Vehicle",
+    "path": "/models/vehicle.glb",
+    "thumbnail": "",
+    "software": [
+      "blender",
+      "substance",
+      "maya"
+    ],
+    "specs": {
+      "Polygon Count": "45,000 tris",
+      "Concept": "Commission",
+      "Time": "~80 hrs"
+    }
+  }
+];
+
     let modelsGallery = [];
 
     function hasModels() {
@@ -56,6 +123,229 @@ import * as THREE from 'three';
       city: `<rect x="3" y="10" width="4" height="12"/><rect x="10" y="6" width="4" height="16"/><rect x="17" y="12" width="4" height="10"/><path d="M5 12h0M12 8h0M12 11h0M19 14h0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>`,
       warehouse: `<rect x="2" y="8" width="20" height="14" rx="1"/><path d="M6 8V4h12v4" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="15" r="3" fill="none" stroke="currentColor" stroke-width="2"/>`
     };
+
+
+    // ============================================================
+    // CONFIGURACIÓN HDR (JSON) - Edita hdrs.json
+    // ============================================================
+    const HDRS_JSON_URL = './hdrs.json';
+
+    // ============================================================
+    // ICONOS DE SOFTWARE (JSON) - Edita software-icons.json
+    // ============================================================
+    const SOFTWARE_ICONS_JSON_URL = './software-icons.json';
+
+    // Fallback interno de iconos (si software-icons.json no está disponible)
+    const fallbackSoftwareIcons = [
+      {
+        id: 'blender',
+        title: 'Blender',
+        viewBox: '0 0 24 24',
+        svg: `<path d="M12.51 13.214c.046-.8.438-1.506 1.03-2.006a3.424 3.424 0 0 1 2.212-.79c.85 0 1.631.3 2.211.79.592.5.983 1.206 1.028 2.005.045.823-.285 1.586-.865 2.153a3.389 3.389 0 0 1-2.374.938 3.393 3.393 0 0 1-2.376-.938c-.58-.567-.91-1.33-.865-2.152M7.35 14.831c.006.314.106.922.256 1.398a7.372 7.372 0 0 0 1.477 2.564 7.08 7.08 0 0 0 2.382 1.715 6.667 6.667 0 0 0 2.896.625 6.65 6.65 0 0 0 2.894-.625 7.07 7.07 0 0 0 2.382-1.715 7.333 7.333 0 0 0 1.477-2.564c.15-.476.25-1.084.256-1.398.018-.99-.127-1.665-.478-2.622-.396-1.078-.943-2.008-1.614-2.84a7.916 7.916 0 0 0-1.21-1.192L12.361 1 4.5 7.236h4.582l-2.7 2.31c-.415.326-.71.582-1.077.988-.473.53-.874 1.133-1.192 1.79-.478 1.01-.699 2.014-.699 3.107z"></path>`
+      },
+      {
+        id: 'substance',
+        title: 'Substance Painter',
+        viewBox: '0 0 24 24',
+        svg: `<circle cx="12" cy="4" r="2"></circle><circle cx="20" cy="20" r="3"></circle><circle cx="4" cy="20" r="1.5"></circle><path d="M12 8c-5.5 0-10 4.5-10 10s4.5 10 10 10 10-4.5 10-10-4.5-10-10-10zm-5.5 6l5.5-3 5.5 3v3l-2.5-.8v-.6l-3-1.7-2.2 1.3 7.7 2.5v3l-5.5 3-5.5-3v-3l2.5.8v.6l3 1.7 2.2-1.3-7.7-2.5v-3z"></path>`
+      },
+      {
+        id: 'photoshop',
+        title: 'Adobe Photoshop',
+        viewBox: '0 0 24 24',
+        svg: `<path d="M9.85 8.42c-.37-.15-.77-.21-1.18-.2-.26 0-.49 0-.68.01v2.96c.2.01.38.01.53.01 1.16 0 1.88-.58 1.88-1.47 0-.63-.19-1.07-.55-1.31zM19.75 4H4.25C3.01 4 2 5.01 2 6.25v11.5C2 18.99 3.01 20 4.25 20h15.5c1.24 0 2.25-1.01 2.25-2.25V6.25C22 5.01 20.99 4 19.75 4zM12.33 12.72c-.81.67-1.98 1-3.48 1-.32 0-.58-.01-.82-.03V17H6V6.66c.67-.1 1.62-.18 2.94-.18 1.32 0 2.27.22 2.92.65.62.4 1.04 1.1 1.04 1.91 0 .81-.26 1.47-.78 1.93-.24.19-.54.36-.79.48v.03c.28.12.51.3.68.52.37.46.56 1.05.56 1.81 0 .66-.17 1.25-.24 1.65zm5.64 3.12c-.34.54-1.02 1.04-2.15 1.04-.92 0-1.7-.2-2.12-.44l.34-1.51c.44.23 1.07.45 1.74.45.63 0 .98-.26.98-.65 0-.37-.29-.58-1.04-.84-1.35-.46-1.98-1.2-1.98-2.08 0-1.22 1.02-2.17 2.68-2.17.79 0 1.37.16 1.79.34l-.35 1.47c-.28-.14-.79-.33-1.43-.33-.53 0-.82.24-.82.56 0 .36.36.52 1.17.82 1.23.45 1.84 1.1 1.84 2.14 0 1.14-.86 2.1-2.65 2.2z"></path>`
+      },
+      {
+        id: 'zbrush',
+        title: 'ZBrush',
+        viewBox: '0 0 24 24',
+        svg: `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"></path>`
+      },
+      {
+        id: 'maya',
+        title: 'Maya',
+        viewBox: '0 0 24 24',
+        svg: `<path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l6.9 3.45L12 11.09 5.1 7.63 12 4.18z"></path>`
+      },
+      {
+        id: 'marvelous',
+        title: 'Marvelous Designer',
+        viewBox: '0 0 24 24',
+        svg: `<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path>`
+      }
+    ];
+
+    function parseHexColor(value, fallback = 0xffffff) {
+      if (typeof value === 'number' && Number.isFinite(value)) return value;
+      if (typeof value === 'string') {
+        const s = value.trim();
+        if (s.startsWith('#')) {
+          const n = parseInt(s.slice(1), 16);
+          if (!Number.isNaN(n)) return n;
+        }
+        if (s.startsWith('0x') || s.startsWith('0X')) {
+          const n = parseInt(s.slice(2), 16);
+          if (!Number.isNaN(n)) return n;
+        }
+        if (/^[0-9a-fA-F]{6}$/.test(s)) {
+          const n = parseInt(s, 16);
+          if (!Number.isNaN(n)) return n;
+        }
+      }
+      return fallback;
+    }
+
+    function normalizeVec3(arr, fallback) {
+      if (Array.isArray(arr) && arr.length === 3 && arr.every(n => typeof n === 'number' && Number.isFinite(n))) {
+        return arr;
+      }
+      return fallback;
+    }
+
+    function normalizeLighting(raw, fallback) {
+      const f = fallback || {};
+      const ambientRaw = (raw && raw.ambient) || {};
+      const mainRaw = (raw && raw.main) || {};
+      const fillRaw = (raw && raw.fill) || {};
+      const rimRaw = (raw && raw.rim) || {};
+
+      return {
+        ambient: {
+          color: parseHexColor(ambientRaw.color, (f.ambient && f.ambient.color) ?? 0xffffff),
+          intensity: (typeof ambientRaw.intensity === 'number') ? ambientRaw.intensity : ((f.ambient && f.ambient.intensity) ?? 0.5)
+        },
+        main: {
+          color: parseHexColor(mainRaw.color, (f.main && f.main.color) ?? 0xffffff),
+          intensity: (typeof mainRaw.intensity === 'number') ? mainRaw.intensity : ((f.main && f.main.intensity) ?? 1.5),
+          pos: normalizeVec3(mainRaw.pos, (f.main && f.main.pos) ?? [5, 10, 7])
+        },
+        fill: {
+          color: parseHexColor(fillRaw.color, (f.fill && f.fill.color) ?? 0xffffff),
+          intensity: (typeof fillRaw.intensity === 'number') ? fillRaw.intensity : ((f.fill && f.fill.intensity) ?? 0.5),
+          pos: normalizeVec3(fillRaw.pos, (f.fill && f.fill.pos) ?? [-5, 5, -5])
+        },
+        rim: {
+          color: parseHexColor(rimRaw.color, (f.rim && f.rim.color) ?? 0xffffff),
+          intensity: (typeof rimRaw.intensity === 'number') ? rimRaw.intensity : ((f.rim && f.rim.intensity) ?? 0.8),
+          pos: normalizeVec3(rimRaw.pos, (f.rim && f.rim.pos) ?? [0, 5, -10])
+        }
+      };
+    }
+
+    async function loadHDRsConfig() {
+      try {
+        const res = await fetch(HDRS_JSON_URL, { cache: 'no-cache' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+      } catch (err) {
+        console.warn('No se pudo cargar hdrs.json. Usando configuración interna.', err);
+        return null;
+      }
+    }
+
+    function applyHDRsConfig(cfg) {
+      const list = Array.isArray(cfg) ? cfg : (cfg && Array.isArray(cfg.hdrs) ? cfg.hdrs : null);
+      if (!Array.isArray(list) || list.length === 0) return;
+
+      // Guardar base actual como fallback
+      const baseHdrPaths = { ...hdrPaths };
+      const baseIcons = { ...lightIcons };
+      const baseConfigs = { ...lightConfigs };
+
+      // Reemplazar lightTypes (array)
+      lightTypes.length = 0;
+      list.forEach((h) => {
+        if (!h || typeof h !== 'object') return;
+        const id = String(h.id || '').trim();
+        if (!id) return;
+        const name = String(h.name || id).toUpperCase();
+        lightTypes.push({ id, name, icon: id });
+      });
+
+      // Reemplazar mapas
+      Object.keys(hdrPaths).forEach(k => delete hdrPaths[k]);
+      Object.keys(lightIcons).forEach(k => delete lightIcons[k]);
+      Object.keys(lightConfigs).forEach(k => delete lightConfigs[k]);
+
+      list.forEach((h) => {
+        if (!h || typeof h !== 'object') return;
+        const id = String(h.id || '').trim();
+        if (!id) return;
+
+        // HDR path
+        const hdr = h.hdr || h.path || baseHdrPaths[id] || baseHdrPaths.studio || '';
+        if (hdr) hdrPaths[id] = hdr;
+
+        // Icono UI
+        const iconSvg = h.iconSvg || h.icon || baseIcons[id] || baseIcons.studio || '';
+        if (iconSvg) lightIcons[id] = iconSvg;
+
+        // Config de luces simuladas
+        const rawLighting = h.lighting || h.light || h.config || null;
+        const base = baseConfigs[id] || baseConfigs.studio || null;
+        if (rawLighting) {
+          lightConfigs[id] = normalizeLighting(rawLighting, base);
+        } else if (base) {
+          lightConfigs[id] = base;
+        }
+      });
+
+      // Default HDR (por id)
+      const defaultId = (!Array.isArray(cfg) && cfg && cfg.default)
+        ? String(cfg.default)
+        : (lightTypes[0] ? lightTypes[0].id : 'studio');
+
+      const idx = lightTypes.findIndex(l => l.id === defaultId);
+      if (idx >= 0) currentLightIndex = idx;
+      else currentLightIndex = 0;
+    }
+
+    async function loadSoftwareIconsConfig() {
+      try {
+        const res = await fetch(SOFTWARE_ICONS_JSON_URL, { cache: 'no-cache' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const list = Array.isArray(data) ? data : (data && Array.isArray(data.icons) ? data.icons : null);
+        if (!Array.isArray(list) || list.length === 0) throw new Error('JSON inválido o vacío');
+
+        // Validación mínima
+        return list
+          .filter(x => x && typeof x === 'object' && x.id)
+          .map(x => ({
+            id: String(x.id),
+            title: String(x.title || x.name || x.id),
+            viewBox: String(x.viewBox || '0 0 24 24'),
+            svg: String(x.svg || '')
+          }));
+      } catch (err) {
+        console.warn('No se pudo cargar software-icons.json. Usando fallback interno.', err);
+        return fallbackSoftwareIcons;
+      }
+    }
+
+    function renderSoftwareIcons(iconList) {
+      const container = document.getElementById('software-icons');
+      if (!container) return;
+
+      container.innerHTML = '';
+
+      iconList.forEach(icon => {
+        const el = document.createElement('div');
+        el.className = 'software-icon';
+        el.dataset.software = icon.id;
+        el.title = icon.title || icon.id;
+
+        const svg = (icon.svg || '').trim();
+        if (svg.toLowerCase().includes('<svg')) {
+          el.innerHTML = svg;
+        } else {
+          const vb = (icon.viewBox || '0 0 24 24');
+          el.innerHTML = `<svg viewBox="${vb}">${svg}</svg>`;
+        }
+
+        container.appendChild(el);
+      });
+    }
 
     // ============================================================
     // VARIABLES GLOBALES
@@ -188,12 +478,12 @@ import * as THREE from 'three';
     // LUCES
     // ============================================================
     const hdrPaths = {
-      studio: 'hdr/studio.hdr',
-      sunset: 'hdr/sunset.hdr',
-      night: 'hdr/night.hdr',
-      forest: 'hdr/forest.hdr',
-      city: 'hdr/city.hdr',
-      warehouse: 'hdr/warehouse.hdr'
+      studio: 'studio.hdr',
+      sunset: 'sunset.hdr',
+      night: 'night.hdr',
+      forest: 'forest.hdr',
+      city: 'city.hdr',
+      warehouse: 'warehouse.hdr'
     };
 
     const hdrCache = {};
@@ -270,6 +560,11 @@ import * as THREE from 'three';
     function loadHDR(hdrName) {
       const path = hdrPaths[hdrName];
       
+      if (!path) {
+        applySimulatedLighting(hdrName);
+        return;
+      }
+
       if (hdrCache[hdrName]) {
         applyEnvironment(hdrCache[hdrName]);
         return;
@@ -295,7 +590,9 @@ import * as THREE from 'three';
 
     function applySimulatedLighting(hdrName) {
       scene.environment = null;
-      const config = lightConfigs[hdrName] || lightConfigs.studio;
+      const fallbackId = (lightTypes && lightTypes[0] && lightTypes[0].id) ? lightTypes[0].id : 'studio';
+      const config = lightConfigs[hdrName] || lightConfigs[fallbackId] || lightConfigs.studio;
+      if (!config) return;
 
       ambientLight.color.setHex(config.ambient.color);
       ambientLight.intensity = config.ambient.intensity;
@@ -314,19 +611,32 @@ import * as THREE from 'three';
     }
 
     function updateLightUI() {
-      const light = lightTypes[currentLightIndex];
-      document.getElementById('light-name').textContent = light.name;
-      document.getElementById('light-svg').innerHTML = lightIcons[light.id];
+      if (!lightTypes || lightTypes.length === 0) return;
+
+      if (currentLightIndex < 0 || currentLightIndex >= lightTypes.length) {
+        currentLightIndex = 0;
+      }
+
+      const light = lightTypes[currentLightIndex] || lightTypes[0];
+
+      const nameEl = document.getElementById('light-name');
+      const svgEl = document.getElementById('light-svg');
+
+      if (nameEl) nameEl.textContent = light.name;
+      if (svgEl) svgEl.innerHTML = lightIcons[light.id] || lightIcons.studio || '';
+
       loadHDR(light.id);
     }
 
     // Light navigation
     document.getElementById('prev-light').addEventListener('click', () => {
+      if (!lightTypes || lightTypes.length === 0) return;
       currentLightIndex = (currentLightIndex - 1 + lightTypes.length) % lightTypes.length;
       updateLightUI();
     });
 
     document.getElementById('next-light').addEventListener('click', () => {
+      if (!lightTypes || lightTypes.length === 0) return;
       currentLightIndex = (currentLightIndex + 1) % lightTypes.length;
       updateLightUI();
     });
@@ -800,6 +1110,16 @@ import * as THREE from 'three';
     // ============================================================
     async function start() {
       modelsGallery = await loadModelsGallery();
+
+      // Cargar HDRs + iconos (desde JSON)
+      const [hdrCfg, iconsCfg] = await Promise.all([
+        loadHDRsConfig(),
+        loadSoftwareIconsConfig()
+      ]);
+
+      if (hdrCfg) applyHDRsConfig(hdrCfg);
+      renderSoftwareIcons(iconsCfg);
+
       createGalleryUI();
       updateLightUI();
       loadModelByIndex(0);

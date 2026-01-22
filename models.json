@@ -2,7 +2,7 @@
   {
     "id": 1,
     "name": "OWL",
-    "path": "models/owl.glb",
+    "path": "./owl.glb",
     "thumbnail": "",
     "software": [
       "blender",
@@ -17,7 +17,7 @@
   {
     "id": 2,
     "name": "Character Model",
-    "path": "models/miles.glb",
+    "path": "./miles.glb",
     "thumbnail": "",
     "software": [
       "blender",
@@ -34,7 +34,7 @@
   {
     "id": 3,
     "name": "Environment Prop",
-    "path": "models/ixo.glb",
+    "path": "./ixo.glb",
     "thumbnail": "",
     "software": [
       "blender",
