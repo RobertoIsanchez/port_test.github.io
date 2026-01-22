@@ -16,7 +16,7 @@ import * as THREE from 'three';
   {
     "id": 1,
     "name": "OWL",
-    "path": "./owl.glb",
+    "path": "models/owl.glb",
     "thumbnail": "",
     "software": [
       "blender",
