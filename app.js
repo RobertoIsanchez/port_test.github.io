@@ -219,10 +219,15 @@ function setHDR(key) {
   });
 }
 
+const pmrem = new THREE.PMREMGenerator(renderer);
+
 function applyHDR(texture) {
-  scene.environment = texture;
-  scene.background = texture;
+  const envMap = pmrem.fromEquirectangular(texture).texture;
+  scene.environment = envMap;
+  scene.background = null;
+  renderer.setClearColor(0x0a0a0a, 1);
 }
+
 
 function createGallery() {
   galleryItemsEl.innerHTML = '';
