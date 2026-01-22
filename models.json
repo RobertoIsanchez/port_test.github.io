@@ -2,12 +2,64 @@
   {
     "id": 1,
     "name": "OWL",
-    "path": "models/owl.glb",
+    "path": "./owl.glb",
+    "thumbnail": "",
+    "software": [
+      "blender",
+      "substance"
+    ],
     "specs": {
-      "POLYGON COUNT": "12,000 tris",
-      "CONCEPT": "Original",
-      "TIME": "~8 hrs"
-    },
-    "software": ["blender", "substance"]
+      "Polygon Count": "12,000 tris",
+      "Concept": "Original",
+      "Time": "~8 hrs"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Character Model",
+    "path": "./miles.glb",
+    "thumbnail": "",
+    "software": [
+      "blender",
+      "zbrush",
+      "substance",
+      "photoshop"
+    ],
+    "specs": {
+      "Polygon Count": "85,000 tris",
+      "Concept": "Artist",
+      "Time": "~120 hrs"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Environment Prop",
+    "path": "./ixo.glb",
+    "thumbnail": "",
+    "software": [
+      "blender",
+      "photoshop"
+    ],
+    "specs": {
+      "Polygon Count": "5,200 tris",
+      "Concept": "Original",
+      "Time": "~15 hrs"
+    }
+  },
+  {
+    "id": 4,
+    "name": "Vehicle",
+    "path": "/models/vehicle.glb",
+    "thumbnail": "",
+    "software": [
+      "blender",
+      "substance",
+      "maya"
+    ],
+    "specs": {
+      "Polygon Count": "45,000 tris",
+      "Concept": "Commission",
+      "Time": "~80 hrs"
+    }
   }
 ]

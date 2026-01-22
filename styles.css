@@ -1,18 +1,16 @@
-<style>
-    * {
+* {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-   body {
-  font-family: 'Inter', 'Segoe UI', sans-serif;
-  width: 100%;
-  min-height: 100dvh;
-  overflow: hidden;
-  background: #0a0a0a;
-}
-
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #0a0a0a;
+    }
 
     #canvas-container {
       position: absolute;
@@ -24,20 +22,15 @@
     }
 
     .overlay {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100dvh;
-  z-index: 10;
-  pointer-events: none;
-
-  padding:
-    calc(24px + env(safe-area-inset-top))
-    calc(32px + env(safe-area-inset-right))
-    calc(24px + env(safe-area-inset-bottom))
-    calc(32px + env(safe-area-inset-left));
-}
-
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+      padding: 24px 32px;
+    }
 
     /* ============================================
        PANEL DE ILUMINACIÓN - ARRIBA IZQUIERDA
@@ -984,7 +977,3 @@
         right: 16px;
       }
     }
-
-
-
-  </style>
