@@ -442,8 +442,8 @@ import * as THREE from 'three';
         // Colores
         uMinorColor: { value: new THREE.Color(0x1a1a1a) },
         uMajorColor: { value: new THREE.Color(0x2a2a2a) },
-        uAxisXColor: { value: new THREE.Color(0xff4444) },
-        uAxisZColor: { value: new THREE.Color(0x4444ff) },
+        uAxisXColor: { value: new THREE.Color(#3b6bff) },
+        uAxisZColor: { value: new THREE.Color(#3b6bff) },
 
         // Control global (para el fade al bajar la cámara)
         uGlobalOpacity: { value: 1.0 }
