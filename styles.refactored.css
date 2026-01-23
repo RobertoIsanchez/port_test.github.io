@@ -462,8 +462,8 @@ body {
     
         /* Orden base (desktop + mobile). Se puede sobreescribir en @media */
     .model-name { order: 0; }
-    .tech-specs { order: 1; }
-    .software-icons { order: 2; }
+    .tech-specs { order: 2; }
+    .software-icons { order: 1; }
 
     .software-icon {
       width: 24px;
@@ -644,12 +644,12 @@ body {
       .software-icons {
         margin-bottom: 12px;
       
-        order: 2;}
+        order: 1;}
 
       .tech-specs {
         margin-bottom: 10px;
       
-        order: 1;}
+        order: 2;}
 
       /* Controls hint - Below model info on mobile */
       .controls-hint {
