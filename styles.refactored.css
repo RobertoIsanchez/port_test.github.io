@@ -12,7 +12,7 @@
        - Para degradado:      --app-bg: linear-gradient(135deg, #0a0a0a 0%, #101a2a 60%, #0a0a0a 100%);
        ============================================ */
     :root {
-     --app-bg: background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+     --app-bg: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
       --text: #ffffff;
 
       /* Grises (texto) */
